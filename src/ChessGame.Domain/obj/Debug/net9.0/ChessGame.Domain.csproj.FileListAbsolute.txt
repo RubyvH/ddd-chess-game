@@ -9,3 +9,4 @@
 /Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Domain/obj/Debug/net9.0/refint/ChessGame.Domain.dll
 /Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Domain/obj/Debug/net9.0/ChessGame.Domain.pdb
 /Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Domain/obj/Debug/net9.0/ref/ChessGame.Domain.dll
+/Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Domain/obj/Debug/net9.0/ChessGame.Domain.sourcelink.json

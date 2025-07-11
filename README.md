@@ -20,13 +20,5 @@ src/
 1. Build the solution:
 
    ```bash
-   dotnet build
+   dotnet restore; dotnet build;
    ```
-
-2. Run the application:
-
-   ```bash
-   dotnet run --project src/ChessGame.Application
-   ```
-
-3. Explore the application functionality via the console output.
