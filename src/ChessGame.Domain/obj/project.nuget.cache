@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "IpZ6Yx42hM8=",
+  "dgSpecHash": "Wh2SPeArAPg=",
   "success": true,
-  "projectFilePath": "/Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Domain/ChessGame.Domain.csproj",
+  "projectFilePath": "/Users/guidohoogslag/Projects/ddd-chess-game/src/ChessGame.Domain/ChessGame.Domain.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

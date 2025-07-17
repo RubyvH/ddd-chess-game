@@ -14,3 +14,6 @@
 /Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Application/obj/Debug/net9.0/ChessGame.Application.pdb
 /Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Application/obj/Debug/net9.0/ref/ChessGame.Application.dll
 /Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Application/obj/Debug/net9.0/ChessGame.Application.sourcelink.json
+/Users/guidohoogslag/Projects/ddd-chess-game/src/ChessGame.Application/obj/Debug/net9.0/ChessGame.Application.dll
+/Users/guidohoogslag/Projects/ddd-chess-game/src/ChessGame.Application/obj/Debug/net9.0/refint/ChessGame.Application.dll
+/Users/guidohoogslag/Projects/ddd-chess-game/src/ChessGame.Application/obj/Debug/net9.0/ChessGame.Application.pdb

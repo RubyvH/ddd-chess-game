@@ -27,33 +27,32 @@
     ]
   },
   "packageFolders": {
-    "/Users/rubenvanharmelen/.nuget/packages/": {}
+    "/Users/guidohoogslag/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Application/ChessGame.Application.csproj",
+      "projectUniqueName": "/Users/guidohoogslag/Projects/ddd-chess-game/src/ChessGame.Application/ChessGame.Application.csproj",
       "projectName": "ChessGame.Application",
-      "projectPath": "/Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Application/ChessGame.Application.csproj",
-      "packagesPath": "/Users/rubenvanharmelen/.nuget/packages/",
-      "outputPath": "/Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Application/obj/",
+      "projectPath": "/Users/guidohoogslag/Projects/ddd-chess-game/src/ChessGame.Application/ChessGame.Application.csproj",
+      "packagesPath": "/Users/guidohoogslag/.nuget/packages/",
+      "outputPath": "/Users/guidohoogslag/Projects/ddd-chess-game/src/ChessGame.Application/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/rubenvanharmelen/.nuget/NuGet/NuGet.Config"
+        "/Users/guidohoogslag/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
-        "/opt/homebrew/Cellar/dotnet/9.0.4/libexec/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "/Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Domain/ChessGame.Domain.csproj": {
-              "projectPath": "/Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Domain/ChessGame.Domain.csproj"
+            "/Users/guidohoogslag/Projects/ddd-chess-game/src/ChessGame.Domain/ChessGame.Domain.csproj": {
+              "projectPath": "/Users/guidohoogslag/Projects/ddd-chess-game/src/ChessGame.Domain/ChessGame.Domain.csproj"
             }
           }
         }
@@ -68,7 +67,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net9.0": {
@@ -89,7 +88,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/9.0.4/libexec/sdk/9.0.105/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.202/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

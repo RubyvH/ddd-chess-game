@@ -14,3 +14,6 @@
 /Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Infrastructure/obj/Debug/net9.0/refint/ChessGame.Infrastructure.dll
 /Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Infrastructure/obj/Debug/net9.0/ChessGame.Infrastructure.pdb
 /Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Infrastructure/obj/Debug/net9.0/ref/ChessGame.Infrastructure.dll
+/Users/guidohoogslag/Projects/ddd-chess-game/src/ChessGame.Infrastructure/obj/Debug/net9.0/ChessGame.Infrastructure.dll
+/Users/guidohoogslag/Projects/ddd-chess-game/src/ChessGame.Infrastructure/obj/Debug/net9.0/refint/ChessGame.Infrastructure.dll
+/Users/guidohoogslag/Projects/ddd-chess-game/src/ChessGame.Infrastructure/obj/Debug/net9.0/ChessGame.Infrastructure.pdb

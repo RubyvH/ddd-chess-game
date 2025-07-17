@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.Reflection.Metadata;
 
 namespace ChessGame.Domain
 {
@@ -12,7 +13,7 @@ namespace ChessGame.Domain
     {
         protected abstract IEnumerable<object> GetAtomicValues();
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj != null &&
                    this.GetType() == obj.GetType() &&
@@ -26,13 +27,19 @@ namespace ChessGame.Domain
                     .Aggregate((x, y) => x ^ y);
         }
 
-        public static bool operator ==(ValueObject left, ValueObject right)
+        public static bool operator ==(ValueObject? left, ValueObject? right)
         {
+            if (left == null && right == null) return true;
+            if (left == null || right == null) return false;
+            
             return AreEqual(left, right);
         }
 
-        public static bool operator !=(ValueObject left, ValueObject right)
+        public static bool operator !=(ValueObject? left, ValueObject? right)
         {
+            if (left == null && right == null) return false;
+            if (left == null || right == null) return true;
+
             return !AreEqual(left, right);
         }
 

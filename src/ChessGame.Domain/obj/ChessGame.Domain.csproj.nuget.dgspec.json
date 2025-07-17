@@ -1,26 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "/Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Domain/ChessGame.Domain.csproj": {}
+    "/Users/guidohoogslag/Projects/ddd-chess-game/src/ChessGame.Domain/ChessGame.Domain.csproj": {}
   },
   "projects": {
-    "/Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Domain/ChessGame.Domain.csproj": {
+    "/Users/guidohoogslag/Projects/ddd-chess-game/src/ChessGame.Domain/ChessGame.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Domain/ChessGame.Domain.csproj",
+        "projectUniqueName": "/Users/guidohoogslag/Projects/ddd-chess-game/src/ChessGame.Domain/ChessGame.Domain.csproj",
         "projectName": "ChessGame.Domain",
-        "projectPath": "/Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Domain/ChessGame.Domain.csproj",
-        "packagesPath": "/Users/rubenvanharmelen/.nuget/packages/",
-        "outputPath": "/Users/rubenvanharmelen/dev/code/ddd-chess-game/src/ChessGame.Domain/obj/",
+        "projectPath": "/Users/guidohoogslag/Projects/ddd-chess-game/src/ChessGame.Domain/ChessGame.Domain.csproj",
+        "packagesPath": "/Users/guidohoogslag/.nuget/packages/",
+        "outputPath": "/Users/guidohoogslag/Projects/ddd-chess-game/src/ChessGame.Domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/rubenvanharmelen/.nuget/NuGet/NuGet.Config"
+          "/Users/guidohoogslag/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "/opt/homebrew/Cellar/dotnet/9.0.4/libexec/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -39,7 +38,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.200"
       },
       "frameworks": {
         "net9.0": {
@@ -60,7 +59,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/9.0.4/libexec/sdk/9.0.105/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.202/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

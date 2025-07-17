@@ -1,19 +1,43 @@
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace ChessGame.Domain;
 
 public class Board : ValueObject
 {
-    public IReadOnlyList<Square> Squares { get; }
+    public Arrangement arrangement { get; }
+    public List<MoveSet> moveSets { get; }
 
-    public Board(IReadOnlyList<Square> squares)
+    public Piece.PieceColor activeColor { get; }
+
+    public Board()
     {
-        Squares = squares;
+        arrangement = new Arrangement();
+        moveSets = DetermineMoveSets();
+    }
+    public Board(Board previousBoard, Position tileFrom, Position tileTo)
+    {
+
+        arrangement = new Arrangement(previousBoard.arrangement, tileFrom, tileTo);
+
+        moveSets = DetermineMoveSets();
+
+    }
+
+    private List<MoveSet> DetermineMoveSets()
+    {
+
+        var moveSets = new List<MoveSet>();
+        foreach (var (position, piece) in arrangement.GetAllPieces())
+        {
+            if (piece != null && piece.Color == activeColor)
+                moveSets.Add(arrangement.GetMovesFrom(position));
+        }
+        return moveSets;
     }
 
     protected override IEnumerable<object> GetAtomicValues()
     {
-        foreach (var square in Squares)
-            yield return square;
+        throw new System.NotImplementedException();
     }
 }
