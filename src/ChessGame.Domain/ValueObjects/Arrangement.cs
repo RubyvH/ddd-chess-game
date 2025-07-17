@@ -31,19 +31,28 @@ public class Arrangement : ValueObject {
         foreach (var (iPosition, iPiece) in oldState.GetAllPieces())
         {
             if (iPosition == tileFrom) continue;
-            if (iPiece != null) Grid[iPosition.X, iPosition.Y] = iPiece;
+            Grid[iPosition.X, iPosition.Y] = iPiece;
         }
 
         Grid[tileTo.X, tileTo.Y] = movedPiece;
     }
     
-    public IEnumerable<(Position position, Piece? piece)> GetAllPieces()
+    public IEnumerable<(Position position, Piece piece)> GetAllPieces()
+    {
+        foreach (var (position, piece) in GetAllPositions())
+        {
+            if (piece == null) continue;
+            yield return (position, piece);
+        }
+    }
+    public IEnumerable<(Position position, Piece? piece)> GetAllPositions()
     {
         for (int x = 0; x < Grid.GetLength(0); x++)
         {
             for (int y = 0; y < Grid.GetLength(1); y++)
             {
                 var position = new Position(x, y);
+
                 yield return (position, GetPieceAt(position));
             }
         }
