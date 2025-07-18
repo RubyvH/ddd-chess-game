@@ -14,14 +14,5 @@
 
 obj/
 bin/
+Debug/
 .idea/
-#**/Debug/
-#**/debug/
-#**/obj/
-#**/bin/
-#Debug/
-#debug/
-#obj/
-#bin/
-#src/ChessGame.Domain/bin/Debug/net9.0/ChessGame.Domain.dll
-#.idea/
