@@ -1,15 +1,21 @@
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using System.Diagnostics;
 
 namespace ChessGame.Domain;
 
-public class Arrangement : ValueObject {
-    public Piece[, ] Grid { get;}
+public class Arrangement : ValueObject
+{
+    public enum MoveType
+    {
+        Move,
+        Attack,
+        None
+    }
 
     public Arrangement()
     {
-        Grid = new Piece[8, 8];
+        Grid = new Piece[BoardSize, BoardSize];
         // arrange board
         Grid[0, 0] = new Piece(Piece.PieceType.Rook, Piece.PieceColor.White);
         Grid[0, 7] = new Piece(Piece.PieceType.Rook, Piece.PieceColor.White);
@@ -22,11 +28,12 @@ public class Arrangement : ValueObject {
         Grid[6, 0] = new Piece(Piece.PieceType.Pawn, Piece.PieceColor.Black);
         Grid[6, 7] = new Piece(Piece.PieceType.Pawn, Piece.PieceColor.Black);
     }
+
     public Arrangement(Arrangement oldState, Position tileFrom, Position tileTo)
     {
         Grid = new Piece[8, 8];
         var movedPiece = oldState.GetPieceAt(tileFrom);
-        if(movedPiece == null) throw new System.ArgumentException("Dat kan niet");
+        if (movedPiece == null) throw new ArgumentException("Dat kan niet");
 
         foreach (var (iPosition, iPiece) in oldState.GetAllPieces())
         {
@@ -36,7 +43,11 @@ public class Arrangement : ValueObject {
 
         Grid[tileTo.X, tileTo.Y] = movedPiece;
     }
-    
+
+    public static int BoardSize => 8;
+
+    public Piece[,] Grid { get; }
+
     public IEnumerable<(Position position, Piece piece)> GetAllPieces()
     {
         foreach (var (position, piece) in GetAllPositions())
@@ -45,16 +56,15 @@ public class Arrangement : ValueObject {
             yield return (position, piece);
         }
     }
+
     public IEnumerable<(Position position, Piece? piece)> GetAllPositions()
     {
-        for (int x = 0; x < Grid.GetLength(0); x++)
+        for (var x = 0; x < Grid.GetLength(0); x++)
+        for (var y = 0; y < Grid.GetLength(1); y++)
         {
-            for (int y = 0; y < Grid.GetLength(1); y++)
-            {
-                var position = new Position(x, y);
+            var position = new Position(x, y);
 
-                yield return (position, GetPieceAt(position));
-            }
+            yield return (position, GetPieceAt(position));
         }
     }
 
@@ -75,108 +85,163 @@ public class Arrangement : ValueObject {
 
         if (piece == null)
             return new MoveSet(position, moveList);
-            
+
+        Debug.WriteLine($"Determine moveset for {position} - {piece} ");
         switch (piece.Type)
         {
             case Piece.PieceType.Rook:
 
-                for (int x = position.X + 1; x < Grid.GetLength(0); x++)
+                Debug.WriteLine(" > Moving x++");
+                for (var x = position.X + 1; x < Grid.GetLength(0); x++)
                 {
                     var targetPosition = new Position(x, position.Y);
-                    var pieceAtTarget = GetPieceAt(targetPosition);
-                    
-                    if (pieceAtTarget == null)
+                    var moveType = CheckMove(targetPosition, piece.Color);
+                    if (moveType == MoveType.Move)
+                    {
                         moveList.Add(targetPosition);
-
-                    else if (pieceAtTarget.Color != piece.Color)
+                    }
+                    else if (moveType == MoveType.Attack)
                     {
                         moveList.Add(targetPosition);
                         break;
                     }
                     else
+                    {
                         break;
+                    }
                 }
-                for (int x = position.X - 1; x > 0; x--)
+
+                Debug.WriteLine(" > Moving x--");
+                for (var x = position.X - 1; x > 0; x--)
                 {
                     var targetPosition = new Position(x, position.Y);
-                    var pieceAtTarget = GetPieceAt(targetPosition);
-                    
-                    if (pieceAtTarget == null)
+                    var moveType = CheckMove(targetPosition, piece.Color);
+                    if (moveType == MoveType.Move)
+                    {
                         moveList.Add(targetPosition);
-
-                    else if (pieceAtTarget.Color != piece.Color)
+                    }
+                    else if (moveType == MoveType.Attack)
                     {
                         moveList.Add(targetPosition);
                         break;
                     }
                     else
+                    {
                         break;
+                    }
                 }
-                for (int y = position.Y + 1; y < Grid.GetLength(0); y++)
+
+                Debug.WriteLine(" > Moving y++");
+                for (var y = position.Y + 1; y < Grid.GetLength(0); y++)
                 {
                     var targetPosition = new Position(position.X, y);
-                    var pieceAtTarget = GetPieceAt(targetPosition);
-                    
-                    if (pieceAtTarget == null)
+                    var moveType = CheckMove(targetPosition, piece.Color);
+                    if (moveType == MoveType.Move)
+                    {
                         moveList.Add(targetPosition);
-
-                    else if (pieceAtTarget.Color != piece.Color)
+                    }
+                    else if (moveType == MoveType.Attack)
                     {
                         moveList.Add(targetPosition);
                         break;
                     }
                     else
+                    {
                         break;
+                    }
                 }
-                for (int y = position.Y - 1; y > 0; y--)
+
+                Debug.WriteLine(" > Moving y--");
+                for (var y = position.Y - 1; y > 0; y--)
                 {
                     var targetPosition = new Position(position.X, y);
-                    var pieceAtTarget = GetPieceAt(targetPosition);
-                    
-                    if (pieceAtTarget == null)
+                    var moveType = CheckMove(targetPosition, piece.Color);
+                    if (moveType == MoveType.Move)
+                    {
                         moveList.Add(targetPosition);
-
-                    else if (pieceAtTarget.Color != piece.Color)
+                    }
+                    else if (moveType == MoveType.Attack)
                     {
                         moveList.Add(targetPosition);
                         break;
                     }
                     else
+                    {
                         break;
+                    }
                 }
+
                 break;
 
             case Piece.PieceType.Pawn:
                 if (piece.Color == Piece.PieceColor.White)
                 {
-                    moveList.Add(new Position(position.X + 1, position.Y));
-                    if (GetPieceAt(new Position(position.X + 1, position.Y + 1))?.Color != piece.Color)
-                        moveList.Add(new Position(position.X + 1, position.Y + 1));
+                    Debug.WriteLine(" > Moving/attacking X+");
+                    var targetPosition = new Position(position.X + 1, position.Y);
+                    if (CheckMove(targetPosition, piece.Color) == MoveType.Move)
+                        moveList.Add(targetPosition);
 
-                    if (GetPieceAt(new Position(position.X + 1, position.Y - 1))?.Color != piece.Color)
-                        moveList.Add(new Position(position.X + 1, position.Y - 1));
+                    targetPosition = new Position(position.X + 1, position.Y + 1);
+                    if (CheckMove(targetPosition, piece.Color) == MoveType.Attack)
+                        moveList.Add(targetPosition);
 
-
+                    targetPosition = new Position(position.X + 1, position.Y - 1);
+                    if (CheckMove(targetPosition, piece.Color) == MoveType.Attack)
+                        moveList.Add(targetPosition);
                 }
                 else
                 {
-                    moveList.Add(new Position(position.X - 1, position.Y));
-                    if (GetPieceAt(new Position(position.X - 1, position.Y + 1))?.Color != piece.Color)
-                        moveList.Add(new Position(position.X - 1, position.Y + 1));
+                    Debug.WriteLine(" > Moving/attacking X-");
+                    var targetPosition = new Position(position.X - 1, position.Y);
+                    if (CheckMove(targetPosition, piece.Color) == MoveType.Move)
+                        moveList.Add(targetPosition);
 
-                    if (GetPieceAt(new Position(position.X - 1, position.Y - 1))?.Color != piece.Color)
-                        moveList.Add(new Position(position.X - 1, position.Y - 1));
+                    targetPosition = new Position(position.X - 1, position.Y + 1);
+                    if (CheckMove(targetPosition, piece.Color) == MoveType.Attack)
+                        moveList.Add(targetPosition);
 
+                    targetPosition = new Position(position.X - 1, position.Y - 1);
+                    if (CheckMove(targetPosition, piece.Color) == MoveType.Attack)
+                        moveList.Add(targetPosition);
                 }
 
                 break;
-
         }
+
         return new MoveSet(position, moveList);
     }
 
+    private MoveType CheckMove(Position targetPosition, Piece.PieceColor moverColor)
+    {
+        Debug.Write($"   > {targetPosition}");
+        if (!targetPosition.IsValid())
+        {
+            Debug.WriteLine(" - out of bounds");
+            return MoveType.None;
+        }
+
+        var pieceAtTarget = GetPieceAt(targetPosition);
+        Debug.Write($" has {pieceAtTarget?.ToString() ?? "nothing"}");
+
+        if (pieceAtTarget == null)
+        {
+            Debug.WriteLine(" - is empty");
+            return MoveType.Move;
+        }
+
+        if (pieceAtTarget.Color != moverColor)
+        {
+            Debug.WriteLine(" - has enemy");
+            return MoveType.Attack;
+        }
+
+        Debug.WriteLine(" - can't move");
+        return MoveType.None;
+    }
+
+
     protected override IEnumerable<object> GetAtomicValues()
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 }

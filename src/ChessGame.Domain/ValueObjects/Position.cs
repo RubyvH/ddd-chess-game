@@ -7,6 +7,18 @@ public class Position(int x, int y) : ValueObject
     public int X { get; } = x;
     public int Y { get; } = y;
 
+    public override string ToString()
+    {
+        return $"{(char)('A' + X)}{Y}";
+    }
+
+    public bool IsValid()
+    {
+        if (X < 0 || X > Arrangement.BoardSize - 1 ||
+            Y < 0 || Y > Arrangement.BoardSize - 1) return false;
+        return true;
+    }
+
     protected override IEnumerable<object> GetAtomicValues()
     {
         yield return X;
