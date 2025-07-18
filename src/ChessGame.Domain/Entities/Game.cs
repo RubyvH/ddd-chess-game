@@ -54,7 +54,7 @@ public class Game : AggregateRoot<Guid>
                 var piece = GetBoard().Arrangement.GetPieceAt(position);
                 if (piece == null)
                 {
-                    if (position.Color() == Piece.PieceColor.White) Console.Write('■');
+                    if (position.Color == Piece.PieceColor.White) Console.Write('■');
                     else Console.Write('□');
                 }
                 else
@@ -75,6 +75,6 @@ public class Game : AggregateRoot<Guid>
     public void PrintMoveSets()
     {
         foreach (var moveSet in GetBoard().MoveSets)
-            Console.WriteLine($" {moveSet.Piece} ({moveSet.From}) can move to: {string.Join(',', moveSet.To)}");
+            Console.WriteLine($"| {moveSet.Piece} ({moveSet.From}) can move to: {string.Join(',', moveSet.To)}");
     }
 }

@@ -1,21 +1,41 @@
+using System;
 using System.Collections.Generic;
 
 namespace ChessGame.Domain;
 
-public class Position(int x, int y) : ValueObject
+public class Position : ValueObject
 {
-    public int X { get; } = x;
-    public int Y { get; } = y;
-
-    public Piece.PieceColor Color()
+    public Position(int x, int y)
     {
-        if ((X + Y) % 2 == 0) return Piece.PieceColor.Black;
-        return Piece.PieceColor.White;
+        Y = y;
+        X = x;
     }
+
+    public Position(string positionCode)
+    {
+        if (positionCode.Length != 2)
+            throw new ArgumentException($"Position code '{positionCode}' is not valid, must be exactly 2 characters.");
+
+        if (!char.IsBetween(positionCode.ToLower()[0], 'a', 'h'))
+            throw new ArgumentException(
+                $"Position code '{positionCode}' is not valid, first char must be between 'a' and 'h'.");
+
+        if (!char.IsBetween(positionCode[1], '1', '8'))
+            throw new ArgumentException(
+                $"Position code '{positionCode}' is not valid, second char must be between '1' and '8'.");
+        X = int.Parse(positionCode[1] + "")-1;
+        Y = positionCode.ToLower()[0] - 'a';
+    }
+
+    public int X { get; }
+    public int Y { get; }
+
+    public Piece.PieceColor Color => (X + Y) % 2 == 0 ? Piece.PieceColor.Black : Piece.PieceColor.White;
+
 
     public override string ToString()
     {
-        return $"{(char)('A' + Y)}{X+1}";
+        return $"{(char)('A' + Y)}{X + 1}";
     }
 
     public bool IsValid()
