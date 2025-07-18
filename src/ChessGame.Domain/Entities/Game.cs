@@ -24,7 +24,7 @@ public class Game : AggregateRoot<Guid>
 
     private Player Player1 { get; set; }
     private Player Player2 { get; set; }
-    private List<Board> GameState { get; set; }
+    private List<Board> GameState { get; }
 
     public Task StartGame(string player1Name, Guid player1Id, string player2Name, Guid player2Id)
     {
@@ -40,5 +40,12 @@ public class Game : AggregateRoot<Guid>
     protected override void When(DomainEvent domainEvent)
     {
         throw new ArgumentException("Aggergates handle commands, not events!");
+    }
+
+
+    public void PrintMoveSets()
+    {
+        foreach (var moveSet in GetBoard().MoveSets)
+            Console.WriteLine($" {moveSet.Piece} ({moveSet.From}) can move to: {string.Join(',', moveSet.To)}");
     }
 }

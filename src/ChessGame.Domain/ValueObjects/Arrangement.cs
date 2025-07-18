@@ -75,16 +75,11 @@ public class Arrangement : ValueObject
 
     public MoveSet GetMovesFrom(Position position)
     {
-        // retrieve piece at position
-        // determine logic for piece movement
-        // determine logic for piece combat
-        // collect all possible moves in list
-        // return list as moveset
         List<Position> moveList = new();
         var piece = GetPieceAt(position);
 
         if (piece == null)
-            return new MoveSet(position, moveList);
+            return new MoveSet(position, piece, moveList);
 
         Debug.WriteLine($"Determine moveset for {position} - {piece} ");
         switch (piece.Type)
@@ -206,9 +201,11 @@ public class Arrangement : ValueObject
                 }
 
                 break;
+            default:
+                throw new NotImplementedException();
         }
 
-        return new MoveSet(position, moveList);
+        return new MoveSet(position, piece, moveList);
     }
 
     private MoveType CheckMove(Position targetPosition, Piece.PieceColor moverColor)

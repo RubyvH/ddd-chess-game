@@ -8,5 +8,6 @@ internal class Program
     {
         var startCommand = new StartGameCommand("Henk", "Ook Henk", Guid.NewGuid(), Guid.NewGuid());
         var theGame = new Game(startCommand);
+        theGame.PrintMoveSets();
     }
 }
