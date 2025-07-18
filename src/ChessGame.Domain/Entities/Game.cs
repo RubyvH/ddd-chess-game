@@ -25,7 +25,7 @@ public class Game(Guid id) : AggregateRoot<Guid>(id)
 
     public Board GetBoard()
     {
-        return GameState[GameState.Count - 1];
+        return GameState[^1];
     }
 
 
