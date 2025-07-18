@@ -7,9 +7,15 @@ public class Position(int x, int y) : ValueObject
     public int X { get; } = x;
     public int Y { get; } = y;
 
+    public Piece.PieceColor Color()
+    {
+        if ((X + Y) % 2 == 0) return Piece.PieceColor.Black;
+        return Piece.PieceColor.White;
+    }
+
     public override string ToString()
     {
-        return $"{(char)('A' + X)}{Y}";
+        return $"{(char)('A' + Y)}{X+1}";
     }
 
     public bool IsValid()

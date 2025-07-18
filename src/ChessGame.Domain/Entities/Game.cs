@@ -42,6 +42,35 @@ public class Game : AggregateRoot<Guid>
         throw new ArgumentException("Aggergates handle commands, not events!");
     }
 
+    public void PrintBoard()
+    {
+        Console.WriteLine("   1 2 3 4 5 6 7 8");
+        for (var y = 0; y < GetBoard().Arrangement.Grid.GetLength(1); y++)
+        {
+            Console.Write($"{(char)('A' + y)}  ");
+            for (var x = 0; x < GetBoard().Arrangement.Grid.GetLength(0); x++)
+            {
+                var position = new Position(x, y);
+                var piece = GetBoard().Arrangement.GetPieceAt(position);
+                if (piece == null)
+                {
+                    if (position.Color() == Piece.PieceColor.White) Console.Write('■');
+                    else Console.Write('□');
+                }
+                else
+                {
+                    if (piece.Color == Piece.PieceColor.White)
+                        Console.Write(piece.Type.ToString().ToUpper()[0]);
+                    else
+                        Console.Write(piece.Type.ToString().ToLower()[0]);
+                }
+
+                Console.Write(' ');
+            }
+
+            Console.WriteLine();
+        }
+    }
 
     public void PrintMoveSets()
     {

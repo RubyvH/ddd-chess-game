@@ -46,7 +46,7 @@ public class Arrangement : ValueObject
 
     public static int BoardSize => 8;
 
-    public Piece[,] Grid { get; }
+    public Piece?[,] Grid { get; }
 
     public IEnumerable<(Position position, Piece piece)> GetAllPieces()
     {
