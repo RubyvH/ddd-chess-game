@@ -18,19 +18,17 @@ internal class Program
             theGame.PrintMoveSets();
             Console.WriteLine();
 
-            var validPieceSelected = false;
-            var validMoveSelected = false;
 
-            MoveSet moveSet;
-            Piece pieceToMove;
-            Position fromPosition;
-            while (!validPieceSelected)
+            MoveSet? moveSet = null;
+            while (moveSet is null)
             {
+                Console.WriteLine("");
                 Console.WriteLine("Select a piece to move...");
                 var positionCodeToMoveFrom = Console.ReadLine();
                 if (positionCodeToMoveFrom is null) continue;
 
 
+                Position fromPosition;
                 try
                 {
                     fromPosition = new Position(positionCodeToMoveFrom);
@@ -41,24 +39,31 @@ internal class Program
                     continue;
                 }
 
-                pieceToMove = theGame.GetBoard().Arrangement.GetPieceAt(fromPosition);
-                if (pieceToMove is null) Console.WriteLine($"No piece found at {fromPosition}.");
+                moveSet = theGame.GetBoard().Arrangement.GetMovesFrom(fromPosition);
 
-                moveSet = theGame.GetBoard().Arrangement.
-                validPieceSelected = true;
+                if (moveSet.Piece is null)
+                {
+                    Console.WriteLine($"No piece found at {moveSet.From}.");
+                    moveSet = null;
+                }
+                else if (!moveSet.To.Any())
+                {
+                    Console.WriteLine($"{moveSet.Piece} at {moveSet.From} has no moves");
+                    moveSet = null;
+                }
             }
 
-            while (!validMoveSelected)
+            Position? targetPosition = null;
+            while (targetPosition is null)
             {
-                Console.WriteLine("Select a position to move to ()...");
-                var positionCodeToMoveFrom = Console.ReadLine();
-                if (positionCodeToMoveFrom is null) continue;
-
-                Position targetPosition = null;
+                Console.WriteLine("");
+                Console.WriteLine($"Select a position to move {moveSet.Piece} to {string.Join(',', moveSet.To)}...");
+                var positionCodeToMoveTo = Console.ReadLine();
+                if (positionCodeToMoveTo is null) continue;
 
                 try
                 {
-                    targetPosition = new Position(positionCodeToMoveFrom);
+                    targetPosition = new Position(positionCodeToMoveTo);
                 }
                 catch (Exception e)
                 {
@@ -66,9 +71,13 @@ internal class Program
                     continue;
                 }
 
-                pieceToMove = theGame.GetBoard().Arrangement.GetPieceAt(targetPosition);
-                if (pieceToMove is null) Console.WriteLine($"No piece found at {targetPosition}.");
+                if (!moveSet.To.Contains(targetPosition))
+                {
+                    Console.WriteLine($"{moveSet.Piece} at {moveSet.From} can't move to {targetPosition}.");
+                    targetPosition = null;
+                }
             }
+
         }
     }
 }
