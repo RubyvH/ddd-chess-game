@@ -78,6 +78,8 @@ internal class Program
                 }
             }
 
+            var moveCommand = new MovePieceCommand(moveSet.From, targetPosition);
+            theGame.Perform(moveCommand);
         }
     }
 }

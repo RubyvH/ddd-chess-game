@@ -77,4 +77,9 @@ public class Game : AggregateRoot<Guid>
         foreach (var moveSet in GetBoard().MoveSets)
             Console.WriteLine($"| {moveSet.Piece} ({moveSet.From}) can move to: {string.Join(',', moveSet.To)}");
     }
+
+    public void Perform(MovePieceCommand command)
+    {
+        GameState.Add(new Board(GetBoard(), command.From, command.to));
+    }
 }
