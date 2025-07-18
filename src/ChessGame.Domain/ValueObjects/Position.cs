@@ -2,15 +2,10 @@ using System.Collections.Generic;
 
 namespace ChessGame.Domain;
 
-public class Position : ValueObject {
-    public int X { get; }
-    public int Y { get; }
-
-    public Position(int x, int y)
-    {
-        X = x;
-        Y = y;
-    }
+public class Position(int x, int y) : ValueObject
+{
+    public int X { get; } = x;
+    public int Y { get; } = y;
 
     protected override IEnumerable<object> GetAtomicValues()
     {

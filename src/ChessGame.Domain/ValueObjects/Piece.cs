@@ -2,15 +2,12 @@ using System.Collections.Generic;
 
 namespace ChessGame.Domain;
 
-public class Piece : ValueObject
+public class Piece(Piece.PieceType type, Piece.PieceColor color) : ValueObject
 {
-    public PieceType Type { get; }
-    public PieceColor Color { get; }
-
-    public Piece(PieceType type, PieceColor color)
+    public enum PieceColor
     {
-        Type = type;
-        Color = color;
+        White,
+        Black
     }
 
     public enum PieceType
@@ -23,11 +20,8 @@ public class Piece : ValueObject
         King
     }
 
-    public enum PieceColor
-    {
-        White,
-        Black
-    }
+    public PieceType Type { get; } = type;
+    public PieceColor Color { get; } = color;
 
     protected override IEnumerable<object> GetAtomicValues()
     {
