@@ -60,9 +60,17 @@ public class Game : AggregateRoot<Guid>
                 else
                 {
                     if (piece.Color == Piece.PieceColor.White)
-                        Console.Write(piece.Type.ToString().ToUpper()[0]);
+                    {
+                        if (piece.Type == Piece.PieceType.Knight)
+                            Console.Write('N');
+                        else
+                            Console.Write(piece.Type.ToString().ToUpper()[0]);
+                    }
                     else
-                        Console.Write(piece.Type.ToString().ToLower()[0]);
+                        if (piece.Type == Piece.PieceType.Knight)
+                            Console.Write('n');
+                        else
+                            Console.Write(piece.Type.ToString().ToLower()[0]);
                 }
 
                 Console.Write(' ');
