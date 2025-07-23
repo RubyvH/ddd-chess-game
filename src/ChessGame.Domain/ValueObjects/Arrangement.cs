@@ -16,17 +16,38 @@ public class Arrangement : ValueObject
     public Arrangement()
     {
         Grid = new Piece[BoardSize, BoardSize];
-        // arrange board
+        
+        // Arrange white pieces
         Grid[0, 0] = new Piece(Piece.PieceType.Rook, Piece.PieceColor.White);
+        Grid[0, 1] = new Piece(Piece.PieceType.Knight, Piece.PieceColor.White);
+        Grid[0, 2] = new Piece(Piece.PieceType.Bishop, Piece.PieceColor.White);
+        Grid[0, 3] = new Piece(Piece.PieceType.Queen, Piece.PieceColor.White);
+        Grid[0, 4] = new Piece(Piece.PieceType.King, Piece.PieceColor.White);
+        Grid[0, 5] = new Piece(Piece.PieceType.Bishop, Piece.PieceColor.White);
+        Grid[0, 6] = new Piece(Piece.PieceType.Knight, Piece.PieceColor.White);
         Grid[0, 7] = new Piece(Piece.PieceType.Rook, Piece.PieceColor.White);
-        Grid[1, 0] = new Piece(Piece.PieceType.Pawn, Piece.PieceColor.White);
-        Grid[1, 7] = new Piece(Piece.PieceType.Pawn, Piece.PieceColor.White);
-        // todo, implement rest
 
+        // White pawns
+        for (int col = 0; col < 8; col++)
+        {
+            Grid[1, col] = new Piece(Piece.PieceType.Pawn, Piece.PieceColor.White);
+        }
+
+        // Arrange black pieces
         Grid[7, 0] = new Piece(Piece.PieceType.Rook, Piece.PieceColor.Black);
+        Grid[7, 1] = new Piece(Piece.PieceType.Knight, Piece.PieceColor.Black);
+        Grid[7, 2] = new Piece(Piece.PieceType.Bishop, Piece.PieceColor.Black);
+        Grid[7, 3] = new Piece(Piece.PieceType.Queen, Piece.PieceColor.Black);
+        Grid[7, 4] = new Piece(Piece.PieceType.King, Piece.PieceColor.Black);
+        Grid[7, 5] = new Piece(Piece.PieceType.Bishop, Piece.PieceColor.Black);
+        Grid[7, 6] = new Piece(Piece.PieceType.Knight, Piece.PieceColor.Black);
         Grid[7, 7] = new Piece(Piece.PieceType.Rook, Piece.PieceColor.Black);
-        Grid[6, 0] = new Piece(Piece.PieceType.Pawn, Piece.PieceColor.Black);
-        Grid[6, 7] = new Piece(Piece.PieceType.Pawn, Piece.PieceColor.Black);
+
+        // Black pawns
+        for (int col = 0; col < 8; col++)
+        {
+            Grid[6, col] = new Piece(Piece.PieceType.Pawn, Piece.PieceColor.Black);
+        }
     }
 
     public Arrangement(Arrangement oldState, Position tileFrom, Position tileTo)
@@ -85,7 +106,6 @@ public class Arrangement : ValueObject
         switch (piece.Type)
         {
             case Piece.PieceType.Rook:
-
                 Debug.WriteLine(" > Moving x++");
                 for (var x = position.X + 1; x < Grid.GetLength(0); x++)
                 {
@@ -107,7 +127,7 @@ public class Arrangement : ValueObject
                 }
 
                 Debug.WriteLine(" > Moving x--");
-                for (var x = position.X - 1; x > 0; x--)
+                for (var x = position.X - 1; x >= 0; x--)
                 {
                     var targetPosition = new Position(x, position.Y);
                     var moveType = CheckMove(targetPosition, piece.Color);
@@ -127,7 +147,7 @@ public class Arrangement : ValueObject
                 }
 
                 Debug.WriteLine(" > Moving y++");
-                for (var y = position.Y + 1; y < Grid.GetLength(0); y++)
+                for (var y = position.Y + 1; y < Grid.GetLength(1); y++)
                 {
                     var targetPosition = new Position(position.X, y);
                     var moveType = CheckMove(targetPosition, piece.Color);
@@ -147,7 +167,7 @@ public class Arrangement : ValueObject
                 }
 
                 Debug.WriteLine(" > Moving y--");
-                for (var y = position.Y - 1; y > 0; y--)
+                for (var y = position.Y - 1; y >= 0; y--)
                 {
                     var targetPosition = new Position(position.X, y);
                     var moveType = CheckMove(targetPosition, piece.Color);
@@ -165,7 +185,6 @@ public class Arrangement : ValueObject
                         break;
                     }
                 }
-
                 break;
 
             case Piece.PieceType.Pawn:
@@ -183,6 +202,7 @@ public class Arrangement : ValueObject
                     targetPosition = new Position(position.X + 1, position.Y - 1);
                     if (CheckMove(targetPosition, piece.Color) == MoveType.Attack)
                         moveList.Add(targetPosition);
+                        
                 }
                 else
                 {
@@ -199,8 +219,122 @@ public class Arrangement : ValueObject
                     if (CheckMove(targetPosition, piece.Color) == MoveType.Attack)
                         moveList.Add(targetPosition);
                 }
-
                 break;
+
+            case Piece.PieceType.Bishop:
+                Debug.WriteLine(" > Moving diagonally");
+                for (int dx = -1; dx <= 1; dx += 2)
+                {
+                    for (int dy = -1; dy <= 1; dy += 2)
+                    {
+                        int x = position.X + dx;
+                        int y = position.Y + dy;
+                        while (x >= 0 && y >= 0 && x < Grid.GetLength(0) && y < Grid.GetLength(1))
+                        {
+                            var targetPosition = new Position(x, y);
+                            var moveType = CheckMove(targetPosition, piece.Color);
+                            if (moveType == MoveType.Move)
+                            {
+                                moveList.Add(targetPosition);
+                            }
+                            else if (moveType == MoveType.Attack)
+                            {
+                                moveList.Add(targetPosition);
+                                break;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                            x += dx;
+                            y += dy;
+                        }
+                    }
+                }
+                break;
+
+            case Piece.PieceType.Knight:
+                Debug.WriteLine(" > Moving in L-shape");
+                var knightMoves = new (int dx, int dy)[]
+                {
+                    (2, 1), (1, 2), (-1, 2), (-2, 1),
+                    (-2, -1), (-1, -2), (1, -2), (2, -1)
+                };
+
+                foreach (var (dx, dy) in knightMoves)
+                {
+                    var x = position.X + dx;
+                    var y = position.Y + dy;
+                    if (x >= 0 && y >= 0 && x < Grid.GetLength(0) && y < Grid.GetLength(1))
+                    {
+                        var targetPosition = new Position(x, y);
+                        var moveType = CheckMove(targetPosition, piece.Color);
+                        if (moveType != MoveType.None)
+                        {
+                            moveList.Add(targetPosition);
+                        }
+                    }
+                }
+                break;
+
+            case Piece.PieceType.Queen:
+                Debug.WriteLine(" > Moving like Rook and Bishop");
+                for (int dx = -1; dx <= 1; dx++)
+                {
+                    for (int dy = -1; dy <= 1; dy++)
+                    {
+                        if (dx == 0 && dy == 0) continue;
+
+                        int x = position.X + dx;
+                        int y = position.Y + dy;
+                        while (x >= 0 && y >= 0 && x < Grid.GetLength(0) && y < Grid.GetLength(1))
+                        {
+                            var targetPosition = new Position(x, y);
+                            var moveType = CheckMove(targetPosition, piece.Color);
+                            if (moveType == MoveType.Move)
+                            {
+                                moveList.Add(targetPosition);
+                            }
+                            else if (moveType == MoveType.Attack)
+                            {
+                                moveList.Add(targetPosition);
+                                break;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                            x += dx;
+                            y += dy;
+                        }
+                    }
+                }
+                break;
+
+            case Piece.PieceType.King:
+                Debug.WriteLine(" > Moving one square in all directions");
+                for (int dx = -1; dx <= 1; dx++)
+                {
+                    for (int dy = -1; dy <= 1; dy++)
+                    {
+                        if (dx == 0 && dy == 0) continue;
+
+                        var x = position.X + dx;
+                        var y = position.Y + dy;
+
+                        if (x >= 0 && y >= 0 && x < Grid.GetLength(0) && y < Grid.GetLength(1))
+                        {
+                            var targetPosition = new Position(x, y);
+                            var moveType = CheckMove(targetPosition, piece.Color);
+                            if (moveType != MoveType.None)
+                            {
+                                moveList.Add(targetPosition);
+                            }
+                        }
+                    }
+                }
+                break;
+
             default:
                 throw new NotImplementedException();
         }
@@ -241,4 +375,5 @@ public class Arrangement : ValueObject
     {
         throw new NotImplementedException();
     }
+
 }

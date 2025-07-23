@@ -20,6 +20,7 @@ public class Game : AggregateRoot<Guid>
         [
             new Board()
         ];
+        GameState[0].ActiveColor = Piece.PieceColor.White;
     }
 
     private Player Player1 { get; set; }
@@ -60,9 +61,17 @@ public class Game : AggregateRoot<Guid>
                 else
                 {
                     if (piece.Color == Piece.PieceColor.White)
-                        Console.Write(piece.Type.ToString().ToUpper()[0]);
+                    {
+                        if (piece.Type == Piece.PieceType.Knight)
+                            Console.Write('N');
+                        else
+                            Console.Write(piece.Type.ToString().ToUpper()[0]);
+                    }
                     else
-                        Console.Write(piece.Type.ToString().ToLower()[0]);
+                        if (piece.Type == Piece.PieceType.Knight)
+                            Console.Write('n');
+                        else
+                            Console.Write(piece.Type.ToString().ToLower()[0]);
                 }
 
                 Console.Write(' ');
@@ -74,12 +83,23 @@ public class Game : AggregateRoot<Guid>
 
     public void PrintMoveSets()
     {
+        Console.WriteLine($"Active Player: {GetBoard().ActiveColor}");
         foreach (var moveSet in GetBoard().MoveSets)
             Console.WriteLine($"| {moveSet.Piece} ({moveSet.From}) can move to: {string.Join(',', moveSet.To)}");
     }
 
     public void Perform(MovePieceCommand command)
     {
-        GameState.Add(new Board(GetBoard(), command.From, command.to));
+        var currentBoard = GetBoard();
+
+        // Validate that the move is made by the active player
+        var piece = currentBoard.Arrangement.GetPieceAt(command.From);
+        if (piece == null || piece.Color != currentBoard.ActiveColor)
+        {
+            throw new InvalidOperationException("It's not this player's turn.");
+        }
+
+        // Add the new board state with the updated turn
+        GameState.Add(new Board(currentBoard, command.From, command.to));
     }
 }

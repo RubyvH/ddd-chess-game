@@ -9,7 +9,6 @@ public class Board : ValueObject
     {
         Arrangement = new Arrangement();
         MoveSets = DetermineMoveSets();
-        ActiveColor = Piece.PieceColor.White;
     }
 
     public Board(Board previousBoard, Position tileFrom, Position tileTo)
@@ -26,7 +25,7 @@ public class Board : ValueObject
     public Arrangement Arrangement { get; }
     public List<MoveSet> MoveSets { get; }
 
-    public Piece.PieceColor ActiveColor { get; }
+    public Piece.PieceColor ActiveColor { get; set; }
 
     private List<MoveSet> DetermineMoveSets()
     {
