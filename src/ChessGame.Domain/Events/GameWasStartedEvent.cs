@@ -8,4 +8,9 @@ public class GameWasStartedEvent(Guid id, PlayerWhite white, PlayerBlack black) 
     public Guid Id { get; } = id;
     public PlayerWhite White { get; } = white;
     public PlayerBlack Black { get; } = black;
+
+    public override string ToString()
+    {
+        return $"{OccurredOn} - Game with {Id} was started. {White} VS {Black}";
+    }
 }

@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
+using ChessGame.Application.CommandHandlers;
 using ChessGame.Domain;
 using ChessGame.Infrastructure.UserApi;
+using DDD.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,8 +22,11 @@ app.UseSwaggerUI();
 
 app.MapGet("/", () => "Hello, welcome to chess game!");
 
-app.MapPost("/NewGame", (StartGameRequest request, IGameRepository repository) =>
+app.MapPost("/NewGame", async (StartGameRequest request, IGameRepository repository) =>
 {
+    var commandHandler = new StartGameCommandHandler(repository);
+    await commandHandler.Handle(new StartGameCommand(request.Player1Name, request.Player2Name, request.Player1Id,
+        request.Player2Id));
     return Task.CompletedTask;
 });
 

@@ -13,4 +13,9 @@ public class Player(string name, Guid id, Piece.PieceColor color) : ValueObject
     {
         throw new NotImplementedException();
     }
+
+    public override string ToString()
+    {
+        return $"{Name} ({Id}) as {Color}";
+    }
 }
