@@ -1,8 +1,34 @@
-using System;
-using System.Linq;
+using System.Threading.Tasks;
 using ChessGame.Domain;
-using DDD.Core;
+using ChessGame.Infrastructure.UserApi;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
+// Program.cs (top-level statements)
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IGameRepository, FakeRepository>();
+
+var app = builder.Build();
+
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
+
+app.MapGet("/", () => "Hello, welcome to chess game!");
+
+app.MapPost("/NewGame", (StartGameRequest request, IGameRepository repository) =>
+{
+    return Task.CompletedTask;
+});
+
+app.Run();
+
+
+/*
 internal class Program
 {
     private static void Main(string[] args)
@@ -83,3 +109,4 @@ internal class Program
         }
     }
 }
+*/
