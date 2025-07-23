@@ -7,35 +7,41 @@ namespace ChessGame.Domain;
 
 public class Game : AggregateRoot<Guid>
 {
-    public Game(StartGameCommand command) : base(Guid.NewGuid())
+    private Game(Guid id, PlayerWhite white, PlayerBlack black) : base(id)
     {
-        var rand = new Random();
-        var player1IsWhite = rand.Next(0, 1) > 0;
+        White = white;
+        Black = black;
+
+        GameState.Add(new Board());
+    }
+
+    private PlayerWhite White { get; }
+    private PlayerBlack Black { get; }
+    private List<Board> GameState { get; } = new();
+
+    public static Game Create(StartGameCommand command)
+    {
+        PlayerWhite white;
+        PlayerBlack black;
+
+        var player1IsWhite = new Random().Next(0, 1) > 0;
         if (player1IsWhite)
         {
-            White = new Player(command.Player1Name, command.Player1Id, Piece.PieceColor.White);
-            Black = new Player(command.Player2Name, command.Player2Id, Piece.PieceColor.Black);
+            white = new PlayerWhite(command.Player1Name, command.Player1Id);
+            black = new PlayerBlack(command.Player2Name, command.Player2Id);
         }
         else
         {
-            White = new Player(command.Player2Name, command.Player2Id, Piece.PieceColor.White);
-            Black = new Player(command.Player1Name, command.Player1Id, Piece.PieceColor.Black);
+            white = new PlayerWhite(command.Player2Name, command.Player2Id);
+            black = new PlayerBlack(command.Player1Name, command.Player1Id);
         }
 
-        GameState =
-        [
-            new Board()
-        ];
+        var game = new Game(Guid.NewGuid(), white, black);
+
+        game.RaiseEvent(new GameWasStartedEvent(game.Id, game.White, game.Black));
+        return game;
     }
 
-    private Player White { get; set; }
-    private Player Black { get; set; }
-    private List<Board> GameState { get; }
-
-    public Task StartGame(string player1Name, Guid player1Id, string player2Name, Guid player2Id)
-    {
-        return Task.CompletedTask;
-    }
 
     public Board GetBoard()
     {

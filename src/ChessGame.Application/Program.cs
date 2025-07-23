@@ -8,7 +8,7 @@ internal class Program
     private static void Main(string[] args)
     {
         var startCommand = new StartGameCommand("Henk", "Ook Henk", Guid.NewGuid(), Guid.NewGuid());
-        var theGame = new Game(startCommand);
+        var theGame = Game.Create(startCommand);
 
         while (theGame.GetBoard().MoveSets.Any())
         {
