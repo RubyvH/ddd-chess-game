@@ -109,8 +109,8 @@ public class Game : AggregateRoot<Guid>
                 if (piece == null)
                 {
                     if (position.Color == Piece.PieceColor.White) Console.Write('■');
-
-                    displayOut += '□';
+                    else
+                        displayOut += '□';
                 }
                 else
                 {
