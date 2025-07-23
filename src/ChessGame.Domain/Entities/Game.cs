@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using DDD.Core;
 
 namespace ChessGame.Domain;
@@ -17,7 +16,7 @@ public class Game : AggregateRoot<Guid>
 
     private PlayerWhite White { get; }
     private PlayerBlack Black { get; }
-    private List<Board> GameState { get; } = new();
+    private List<Board> GameState { get; } = [];
 
     public static Game Create(StartGameCommand command)
     {
