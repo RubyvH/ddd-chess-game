@@ -11,10 +11,16 @@ public class Game : AggregateRoot<Guid>
     {
         var rand = new Random();
         var player1IsWhite = rand.Next(0, 1) > 0;
-        Player1 = new Player(command.Player1Name, command.Player1Id,
-            player1IsWhite ? Piece.PieceColor.White : Piece.PieceColor.Black);
-        Player2 = new Player(command.Player2Name, command.Player2Id,
-            player1IsWhite ? Piece.PieceColor.Black : Piece.PieceColor.White);
+        if (player1IsWhite)
+        {
+            White = new Player(command.Player1Name, command.Player1Id, Piece.PieceColor.White);
+            Black = new Player(command.Player2Name, command.Player2Id, Piece.PieceColor.Black);
+        }
+        else
+        {
+            White = new Player(command.Player2Name, command.Player2Id, Piece.PieceColor.White);
+            Black = new Player(command.Player1Name, command.Player1Id, Piece.PieceColor.Black);
+        }
 
         GameState =
         [
@@ -22,8 +28,8 @@ public class Game : AggregateRoot<Guid>
         ];
     }
 
-    private Player Player1 { get; set; }
-    private Player Player2 { get; set; }
+    private Player White { get; set; }
+    private Player Black { get; set; }
     private List<Board> GameState { get; }
 
     public Task StartGame(string player1Name, Guid player1Id, string player2Name, Guid player2Id)
