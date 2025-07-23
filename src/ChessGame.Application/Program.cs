@@ -21,11 +21,17 @@ app.UseSwaggerUI();
 
 
 app.MapGet("/", () => "Hello, welcome to chess game!");
-app.MapGet("/{gameId}/{playerId}", async (Guid gameId, Guid playerId, IGameRepository repository) =>
+app.MapGet("/{gameId}/{playerId}/board", async (Guid gameId, Guid playerId, IGameRepository repository) =>
 {
     var commandHandler = new ShowBoardCommandHandler(repository);
     var boardState = await commandHandler.Handle(new ShowBoardCommand(gameId, playerId));
     return boardState;
+});
+app.MapGet("/{gameId}/{playerId}/moves", async (Guid gameId, Guid playerId, IGameRepository repository) =>
+{
+    var commandHandler = new ShowMovesCommandHandler(repository);
+    var moves = await commandHandler.Handle(new ShowMovesCommand(gameId, playerId));
+    return moves;
 });
 
 app.MapPost("/NewGame", async (StartGameRequest request, IGameRepository repository) =>
@@ -36,6 +42,15 @@ app.MapPost("/NewGame", async (StartGameRequest request, IGameRepository reposit
         request.Player2Id));
     return gameId;
 });
+
+app.MapPost("/{gameId}/{playerId}/doMove",
+    async (Guid gameId, Guid playerId, string moveFrom, string moveTo, IGameRepository repository) =>
+    {
+        var commandHandler = new MovePieceCommandHandler(repository);
+        await commandHandler.Handle(new MovePieceCommand(gameId, playerId, new Position(moveFrom),
+            new Position(moveTo)));
+        return gameId;
+    });
 
 
 app.Run();

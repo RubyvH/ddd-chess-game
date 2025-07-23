@@ -65,8 +65,14 @@ public class Game : AggregateRoot<Guid>
 
     public void Perform(MovePieceCommand command)
     {
+        if (GetPlayerById(command.PlayerId).Color != GetBoard().ActiveColor)
+        {
+            Console.WriteLine("its not your turn!");
+            return;
+        }
+
         BoardWasSeen = false;
-        GameState.Add(new Board(GetBoard(), command.From, command.to));
+        GameState.Add(new Board(GetBoard(), command.From, command.To));
     }
 
     public string GetBoardAsPlayer(Guid playerId)
@@ -123,5 +129,13 @@ public class Game : AggregateRoot<Guid>
 
         Console.WriteLine(displayOut);
         return displayOut;
+    }
+
+    public List<MoveSet> GetMovesAsPlayer(Guid playerId)
+    {
+        ViewAsPlayer(playerId);
+        var moves = GetBoard().MoveSets;
+        if (GetPlayerById(playerId).Color == GetBoard().ActiveColor) return moves;
+        return new List<MoveSet>();
     }
 }
