@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IGameRepository, FakeRepository>();
+builder.Services.AddSingleton<IGameRepository, FakeRepository>();
 
 var app = builder.Build();
 
@@ -25,7 +25,7 @@ app.MapGet("/{gameId}/{playerId}", async (Guid gameId, Guid playerId, IGameRepos
 {
     var commandHandler = new ShowBoardCommandHandler(repository);
     var boardState = await commandHandler.Handle(new ShowBoardCommand(gameId, playerId));
-  return boardState;
+    return boardState;
 });
 
 app.MapPost("/NewGame", async (StartGameRequest request, IGameRepository repository) =>
