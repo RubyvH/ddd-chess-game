@@ -11,12 +11,15 @@ public class Game : AggregateRoot<Guid>
         White = white;
         Black = black;
 
+        BoardWasSeen = false;
         GameState.Add(new Board());
     }
 
     private PlayerWhite White { get; }
     private PlayerBlack Black { get; }
     private List<Board> GameState { get; } = [];
+
+    public bool BoardWasSeen { get; set; }
 
     public static Game Create(StartGameCommand command)
     {
@@ -50,38 +53,9 @@ public class Game : AggregateRoot<Guid>
 
     protected override void When(DomainEvent domainEvent)
     {
-        throw new ArgumentException("Aggergates handle commands, not events!");
+        Console.WriteLine($"Aggregate event: {domainEvent.GetType().Name}");
     }
 
-    public void PrintBoard()
-    {
-        Console.WriteLine("   1 2 3 4 5 6 7 8");
-        for (var y = 0; y < GetBoard().Arrangement.Grid.GetLength(1); y++)
-        {
-            Console.Write($"{(char)('A' + y)}  ");
-            for (var x = 0; x < GetBoard().Arrangement.Grid.GetLength(0); x++)
-            {
-                var position = new Position(x, y);
-                var piece = GetBoard().Arrangement.GetPieceAt(position);
-                if (piece == null)
-                {
-                    if (position.Color == Piece.PieceColor.White) Console.Write('■');
-                    else Console.Write('□');
-                }
-                else
-                {
-                    if (piece.Color == Piece.PieceColor.White)
-                        Console.Write(piece.Type.ToString().ToUpper()[0]);
-                    else
-                        Console.Write(piece.Type.ToString().ToLower()[0]);
-                }
-
-                Console.Write(' ');
-            }
-
-            Console.WriteLine();
-        }
-    }
 
     public void PrintMoveSets()
     {
@@ -91,6 +65,63 @@ public class Game : AggregateRoot<Guid>
 
     public void Perform(MovePieceCommand command)
     {
+        BoardWasSeen = false;
         GameState.Add(new Board(GetBoard(), command.From, command.to));
+    }
+
+    public string GetBoardAsPlayer(Guid playerId)
+    {
+        ViewAsPlayer(playerId);
+        return PrintBoard();
+    }
+
+    private void ViewAsPlayer(Guid playerId)
+    {
+        var player = GetPlayerById(playerId);
+        if (player.Color == GetBoard().ActiveColor && !BoardWasSeen) RaiseEvent(new PlayerViewedBoardEvent(player));
+    }
+
+    public Player GetPlayerById(Guid playerId)
+    {
+        if (White.Id == playerId) return White;
+        if (Black.Id == playerId) return Black;
+        throw new KeyNotFoundException($"Player {playerId} does not belong to this game");
+    }
+
+    private string PrintBoard()
+    {
+        var displayOut = "";
+        displayOut += "   1 2 3 4 5 6 7 8";
+        displayOut += "\n";
+        for (var y = 0; y < GetBoard().Arrangement.Grid.GetLength(1); y++)
+        {
+            displayOut += $"{(char)('A' + y)}  ";
+            for (var x = 0; x < GetBoard().Arrangement.Grid.GetLength(0); x++)
+            {
+                var position = new Position(x, y);
+                var piece = GetBoard().Arrangement.GetPieceAt(position);
+                if (piece == null)
+                {
+                    if (position.Color == Piece.PieceColor.White) Console.Write('■');
+
+                    displayOut += '□';
+                }
+                else
+                {
+                    if (piece.Color == Piece.PieceColor.White)
+
+                        displayOut += piece.Type.ToString().ToUpper()[0];
+                    else
+                        displayOut += piece.Type.ToString().ToLower()[0];
+                }
+
+                displayOut += ' ';
+            }
+
+            displayOut += "\n";
+        }
+
+        Console.WriteLine(displayOut);
+        return displayOut;
     }
 }

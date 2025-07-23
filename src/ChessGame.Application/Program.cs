@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using System;
 using ChessGame.Application.CommandHandlers;
 using ChessGame.Domain;
 using ChessGame.Infrastructure.UserApi;
@@ -21,14 +21,22 @@ app.UseSwaggerUI();
 
 
 app.MapGet("/", () => "Hello, welcome to chess game!");
+app.MapGet("/{gameId}/{playerId}", async (Guid gameId, Guid playerId, IGameRepository repository) =>
+{
+    var commandHandler = new ShowBoardCommandHandler(repository);
+    var boardState = await commandHandler.Handle(new ShowBoardCommand(gameId, playerId));
+  return boardState;
+});
 
 app.MapPost("/NewGame", async (StartGameRequest request, IGameRepository repository) =>
 {
     var commandHandler = new StartGameCommandHandler(repository);
-    await commandHandler.Handle(new StartGameCommand(request.Player1Name, request.Player2Name, request.Player1Id,
+    var gameId = await commandHandler.Handle(new StartGameCommand(request.Player1Name, request.Player2Name,
+        request.Player1Id,
         request.Player2Id));
-    return Task.CompletedTask;
+    return gameId;
 });
+
 
 app.Run();
 

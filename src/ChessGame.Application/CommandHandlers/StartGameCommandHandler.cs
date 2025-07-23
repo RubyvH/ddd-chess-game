@@ -5,17 +5,17 @@ using DDD.Core;
 
 namespace ChessGame.Application.CommandHandlers;
 
-public class StartGameCommandHandler(IGameRepository repository)
+public class StartGameCommandHandler(IGameRepository repository) : ICommandHandler
 {
     private readonly IGameRepository _repository = repository;
 
-    public Task Handle(StartGameCommand command)
+    public async Task<Guid> Handle(StartGameCommand command)
     {
         var game = Game.Create(command);
-        _repository.SaveGame(game);
+        await _repository.SaveGame(game);
         foreach (var domainEvent in game.Events) Console.WriteLine(domainEvent);
         game.ClearEvents();
 
-        return Task.CompletedTask;
+        return game.Id;
     }
 }
