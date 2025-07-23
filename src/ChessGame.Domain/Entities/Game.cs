@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DDD.Core;
 
 namespace ChessGame.Domain;
@@ -71,6 +72,25 @@ public class Game : AggregateRoot<Guid>
             return;
         }
 
+        var moveIsValid = false;
+        Console.WriteLine($"{command.From} can move to {command.To}?");
+
+        PrintMoveSets();
+        foreach (var moveSet in GetMovesAsPlayer(command.PlayerId))
+
+            if (moveSet.From == command.From && moveSet.To.Contains(command.To))
+            {
+                moveIsValid = true;
+                break;
+            }
+
+        if (!moveIsValid)
+        {
+            Console.WriteLine("Move is invalid! :(");
+            return;
+        }
+
+        Console.WriteLine("Move is valid! :)");
         BoardWasSeen = false;
         GameState.Add(new Board(GetBoard(), command.From, command.To));
     }
@@ -108,7 +128,7 @@ public class Game : AggregateRoot<Guid>
                 var piece = GetBoard().Arrangement.GetPieceAt(position);
                 if (piece == null)
                 {
-                    if (position.Color == Piece.PieceColor.White) Console.Write('■');
+                    if (position.Color == Piece.PieceColor.White) displayOut += '■';
                     else
                         displayOut += '□';
                 }

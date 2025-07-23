@@ -13,4 +13,10 @@ public class MoveSet(Position from, Piece? piece, IEnumerable<Position> to) : Va
     {
         throw new NotImplementedException();
     }
+
+    public override string ToString()
+    {
+        var pieceString = Piece?.ToString() ?? "";
+        return $"{pieceString} ({From}) can move to: {string.Join(',', To)}";
+    }
 }

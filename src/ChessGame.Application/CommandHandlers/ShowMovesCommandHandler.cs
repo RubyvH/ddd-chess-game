@@ -19,6 +19,6 @@ public class ShowMovesCommandHandler(IGameRepository repository) : ICommandHandl
         game.ClearEvents();
         await _repository.SaveGame(game);
 
-        return string.Join(',', moves);
+        return string.Join('\n', moves);
     }
 }
